@@ -1,0 +1,92 @@
+section .data
+    ;I was only able to get phase 0 done, for some reason when I tried to edit the pFib document and get two readins, it would skip the second read-in call.
+    Mes db 'Please type in a message to be reversed : '
+    lenMes equ $-Mes
+    
+    outputMessage db 'Reversed Results : '
+    lenMessage equ $-outputMessage
+    
+section .bss
+    number  resb 50
+    
+section .text
+    global _start
+
+_start:
+    ; Calling the sys_write call to prompt the user to enter a string.
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, Mes
+    mov edx, lenMes
+    int 80h
+
+
+    ; Calling the read_syscall so the user can actually enter the message.
+    mov eax, 3
+    mov ebx, 0
+    mov ecx, number
+    mov edx, 50
+    int 80h
+    
+
+    ; Calling the write.
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, outputMessage
+    mov edx, lenMessage
+    int 80h
+
+    call getLength
+
+    call reverseString
+
+    ; using write syscall
+    mov eax, 4
+    mov ebx, 1
+    mov ecx, number
+    mov edx, 50
+    int 80h
+
+
+    ; calling the exit system call.
+    mov eax, 1
+    mov ebx, 0
+    int 80h 
+
+
+;function to reverse the string.
+reverseString :
+    mov eax, number
+    mov esi, eax
+    add eax, ecx
+    mov edi, eax
+    dec edi
+    shr ecx, 1
+    jz done
+    reverseLoop:
+        mov al, [esi]
+        mov bl, [edi]
+        mov [esi], bl
+        mov [edi], al
+        inc esi
+        dec edi
+        dec ecx
+        jnz reverseLoop
+
+    done:
+        ret
+
+;function to get the length of the string.
+getLength:
+    push edi
+    mov edi, number
+    sub ecx, ecx
+    sub al, al
+    not ecx
+    cld
+    repne   scasb
+    not ecx
+    dec ecx
+    dec ecx
+    pop edi
+    ret

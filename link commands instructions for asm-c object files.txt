@@ -1,0 +1,12 @@
+to link object files:
+
+ld -m elf_i386 -lc file1.o file2.o -o OutputFilename -I /lib/ld-linux.so.2
+ld -m elf_i386 -lc file1.o file2.o -o OutputFilename -I /lib/ld-linux.so.2
+ld -m elf_i386 -lc file1.o file2.o -o OutputFilename -I /lib/ld-linux.so.2
+ld -m elf_i386 -lc file1.o file2.o -o OutputFilename -I /lib/ld-linux.so.2
+ld -m elf_i386 -lc file1.o file2.o -o OutputFilename -I /lib/ld-linux.so.2
+
+for the .o files:
+
+nasm -f elf
+gcc -c somefile.c
